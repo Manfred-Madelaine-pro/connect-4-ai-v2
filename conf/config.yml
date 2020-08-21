@@ -1,0 +1,7 @@
+
+#  global_config
+---
+
+main:
+  width: &id_1 7
+  length: *id_1
