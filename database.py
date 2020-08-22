@@ -28,9 +28,10 @@ def create_table(con):
 		con.execute(sql_create_table)
 
 
-def insert_rows(con, rows):
+def insert_rows(con, row):
 	sql_insert_row = """
-		INSERT INTO games (dimensions,player1,player2,turn,actions,creation_date) VALUES (
+		INSERT INTO games (dimensions,player1,player2,turn,actions,creation_date)
+		VALUES (
 		  ?,
 		  ?,
 		  ?,
@@ -41,13 +42,13 @@ def insert_rows(con, rows):
 	"""
 	with con:
 		try:
-			con.execute(sql_insert_row, rows)
+			con.execute(sql_insert_row, row)
 		except sqlite3.IntegrityError:
 			return 'Line already exists.' 
 
 
 def array_to_string(arr):
-	return SEPARATOR.join(arr)
+	return SEPARATOR.join(str(e) for e in arr)
 
 
 def string_to_array(string):

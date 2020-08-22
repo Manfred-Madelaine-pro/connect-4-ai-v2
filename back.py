@@ -142,13 +142,13 @@ class Party:
 		return self.board.is_complete()
 
 	def data(self):
-		return [
-			[self.board.width, self.board.length],
+		return (
+			db.array_to_string([self.board.width, self.board.length]),
 			self.first.name,
 			self.second.name,
 			self.turn,
-			self.board.history
-		]
+			db.array_to_string(self.board.history)
+		)
 
 
 # ----------------------------- Database -----------------------------------------
@@ -160,18 +160,14 @@ class Database:
 	def access_db(self):
 		return db.get_connection(self.db_name)
 
-	def save(self, list):
-		# convert list elements to tuple
-		rows = [(elm,) for elm in list]
+	def save(self, data):
 		conn = self.access_db()
-		db.insert_rows(conn, list)
+		db.insert_rows(conn, data)
 		conn.close()
-
 
 	def load_db(self):
 		conn = self.access_db()
 		rows = db.select_all(conn)
-		conn.close()
 
 		db.print_table(rows)
 
@@ -179,6 +175,7 @@ class Database:
 		for row in rows:
 			actions += [row['actions']]
 
+		conn.close()
 		return actions
 
 
