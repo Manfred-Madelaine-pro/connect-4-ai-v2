@@ -30,7 +30,7 @@ class Replay(Generic):
 	def play(self, board):
 		action = self.actions.pop()
 		print(f"{self.name}: Replay action : {action}!")
-		return 
+		return action
 
 
 class RandomAI(Generic):
@@ -38,9 +38,8 @@ class RandomAI(Generic):
 		super().__init__(name)
 
 	def play(self, board):
-		print(f"{self.name}: I know how to play !")
-
-
+		return random.randint(0, len(board[0])-1)
+		
 
 # --------------------------------------------------------------------------
 
@@ -51,7 +50,7 @@ def test_Entity():
 	e = Generic('Generic Entity')
 	rd = RandomAI('Random Entity')
 	
-	board = []
+	board = [[]*7]
 	e.play(board)
 	rd.play(board)
 

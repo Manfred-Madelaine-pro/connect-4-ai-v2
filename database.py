@@ -84,4 +84,5 @@ def test_db_creation():
 	con.close()
 
 
-test_db_creation()
+if __name__ == '__main__':
+	test_db_creation()
