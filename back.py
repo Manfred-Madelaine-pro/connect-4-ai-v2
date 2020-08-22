@@ -73,6 +73,7 @@ class Game:
 	def __init__(self, width, length, name1, name2):
 		self.init_board(width, length)
 		self.pick_players(name1, name2)
+		self.database = Database()
 
 	def init_board(self, width, length):
 		self.board = board.Board(width, length)
@@ -91,6 +92,8 @@ class Game:
 		party = Party(self.board, first, second)
 		party.start()
 		# TODO save party in db
+		self.database.save(party.data())
+		self.database.load_db()
 
 
 # ------------------------------- Party -------------------------------------------
@@ -108,7 +111,7 @@ class Party:
 
 	def start(self):
 		self.board.set_board()
-		print(self.board)
+		print()
 		while "Party is running":
 			print(f'Turn #{self.turn}')
 			if self.next_play(self.first) or self.next_play(self.second):
@@ -138,23 +141,39 @@ class Party:
 
 		return self.board.is_complete()
 
+	def data(self):
+		return [
+			[self.board.width, self.board.length],
+			self.first.name,
+			self.second.name,
+			self.turn,
+			self.board.history
+		]
 
-# ----------------------- Database ---------------------------
+
+# ----------------------------- Database -----------------------------------------
 
 class Database:
-	def access_db(db_name):
-		return db.get_connection(db_name)
+	def __init__(self):
+		self.db_name = 'database/connect_four.db'
+		
+	def access_db(self):
+		return db.get_connection(self.db_name)
 
-
-	def populate_db(db_connection, list):
+	def save(self, list):
 		# convert list elements to tuple
 		rows = [(elm,) for elm in list]
+		conn = self.access_db()
+		db.insert_rows(conn, list)
+		conn.close()
 
-		db.insert_rows(db_connection, rows)
 
+	def load_db(self):
+		conn = self.access_db()
+		rows = db.select_all(conn)
+		conn.close()
 
-	def load_db(db_connection):
-		rows = db.select_all(db_connection)
+		db.print_table(rows)
 
 		actions = []
 		for row in rows:
@@ -180,25 +199,6 @@ def test_Model():
 
 	p1.play(model.board)
 	p2.play(model.board)
-
-
-def test_write_and_read_db():
-	db_name = 'database/connect_four.db'
-	database = access_db(db_name)
-	
-	# create
-
-	rows = [
-		['7, 7', 'Random AI', 'Random AI 2', '3', '1, 2, 3, 4, 5'],
-		['4, 4', 'Random AI', 'Random AI 2', '2', '1, 2, 3'],
-	]
-	populate_db(database, rows)
-	database.close()
-
-	# access
-	database = access_db(db_name)
-	rows = load_db(database)
-	database.close()
 
 
 if __name__ == '__main__':

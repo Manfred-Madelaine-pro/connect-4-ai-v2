@@ -76,7 +76,8 @@ class Board:
 		# print(diag_left, diag_right)
 		cl = self.count_adjacent_tiles(val, diag_left)
 		cr = self.count_adjacent_tiles(val, diag_right)
-		return cl >= MIN_TILE_CONNECTED or cr >= MIN_TILE_CONNECTED
+		# return cl >= MIN_TILE_CONNECTED or cr >= MIN_TILE_CONNECTED
+		return False
 
 	def count_adjacent_tiles(self, val, tiles):
 		c = 0
@@ -92,8 +93,8 @@ class Board:
 	def winning_info(self):
 		# TODO several sens & how many tiles are connected ?
 		row, col = self.get_last_tile()
-		sens = ['horizontaly', 'verticaly', 'diagonaly'][sum(self.all_checks())]
-		return row, col, sens
+		sens = [d for c,d in zip(self.all_checks(), ['horizontaly', 'verticaly', 'diagonaly']) if c]
+		return row, col, ', '.join(sens)
 
 	def get_last_tile(self):
 		col = self.history[-1]

@@ -41,7 +41,7 @@ def insert_rows(con, rows):
 	"""
 	with con:
 		try:
-			con.executemany(sql_insert_row, rows)
+			con.execute(sql_insert_row, rows)
 		except sqlite3.IntegrityError:
 			return 'Line already exists.' 
 
