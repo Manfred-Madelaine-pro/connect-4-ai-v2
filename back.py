@@ -69,18 +69,26 @@ class Menu:
 # ------------------------------ Game --------------------------------------------
 
 class Game:
-	def __init__(self, width, length, name1, name2):
-		self.init_board(width, length)
-		self.pick_players(name1, name2)
+	def __init__(self, grid, min_tile_connected, name1, type1, name2, type2):
+		self.init_board(*grid.values(), min_tile_connected)
+		self.pick_players(name1, type1, name2, type2)
 		self.database = Database()
 
-	def init_board(self, width, length):
-		self.board = board.Board(width, length)
+	def init_board(self, width, length, min_tile_connected):
+		self.board = board.Board(width, length, min_tile_connected)
 
-	def pick_players(self, name1, name2):
+	def pick_players(self, name1, type1, name2, type2):
 		self.players = []
-		self.players += [entity.RandomAI(name1)]
-		self.players += [entity.RandomAI(name2)]
+		self.players += [self.create_entity(name1, type1)]
+		self.players += [self.create_entity(name2, type2)]
+
+	def create_entity(self, name, type):
+		if type.lower() == 'human':
+			return entity.Human(name)
+		elif type.lower() == 'neuralnetwork':
+			return entity.NeuralNetwork(name, self.board.goal)
+		else:
+			return entity.RandomAI(name)
 
 	# -------------------------------- Party ------------------------------------------
 
@@ -88,9 +96,10 @@ class Game:
 		first, second = self.players
 		# TODO : who want's to start ?
 		# random.shuffle()
+
 		party = Party(self.board, first, second)
 		party.start()
-		# TODO save party in db
+
 		self.database.save(party.data())
 		self.database.load_db()
 

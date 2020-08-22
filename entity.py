@@ -38,6 +38,18 @@ class RandomAI(Generic):
 
 	def play(self, board):
 		return random.randint(0, len(board[0])-1)
+
+
+class NeuralNetwork(Generic):
+	def __init__(self, name, connected_tiles_goal):
+		super().__init__(name)
+		self.connected_tiles_goal = connected_tiles_goal
+		self.brain = 'brain'
+
+	def play(self, board):
+		# thoughts = self.brain.think(board)		
+		# choose best thought
+		return random.randint(0, len(board[0])-1)
 		
 
 # ----------------------------- Test ---------------------------------------------

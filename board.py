@@ -1,13 +1,12 @@
 import numpy as np
 
 
-MIN_TILE_CONNECTED = 4 # TODO give bonuses when more tiles than required are connected 
-
-
 class Board:
-	def __init__(self, width, length):
+	def __init__(self, width, length, min_tile_connected):
 		self.width = width
 		self.length = length
+		self.goal = min_tile_connected # TODO give bonuses when more tiles than required are connected 
+
 
 	def set_board(self):
 		self.grid = np.zeros((self.width, self.length))
@@ -55,18 +54,18 @@ class Board:
 
 	def check_horz(self, val, row, col):
 		c = 0
-		born_inf = min(0, abs(col - MIN_TILE_CONNECTED))
-		born_sup = min(self.length, col + MIN_TILE_CONNECTED)
+		born_inf = min(0, abs(col - self.goal))
+		born_sup = min(self.length, col + self.goal)
 		tiles = self.grid[row][born_inf : born_sup]
 
-		return self.count_adjacent_tiles(val, tiles) >= MIN_TILE_CONNECTED
+		return self.count_adjacent_tiles(val, tiles) >= self.goal
 
 	def check_vert(self, val, row, col):
-		born_inf = min(0, abs(row - MIN_TILE_CONNECTED))
-		born_sup = min(self.width, row + MIN_TILE_CONNECTED)
+		born_inf = min(0, abs(row - self.goal))
+		born_sup = min(self.width, row + self.goal)
 		tiles = [t[col] for t in self.grid[born_inf : born_sup]]
 
-		return self.count_adjacent_tiles(val, tiles) >= MIN_TILE_CONNECTED
+		return self.count_adjacent_tiles(val, tiles) >= self.goal
 
 	def check_diag(self, val, row, col):
 		# bug when width != length		
@@ -76,7 +75,7 @@ class Board:
 		# print(diag_left, diag_right)
 		cl = self.count_adjacent_tiles(val, diag_left)
 		cr = self.count_adjacent_tiles(val, diag_right)
-		# return cl >= MIN_TILE_CONNECTED or cr >= MIN_TILE_CONNECTED
+		# return cl >= self.goal or cr >= self.goal
 		return False
 
 	def count_adjacent_tiles(self, val, tiles):
@@ -147,8 +146,6 @@ def test_check():
 
 	res = b.check_vert(2, 2, 6)
 	print(res)
-
-
 
 
 if __name__ == '__main__':

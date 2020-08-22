@@ -3,7 +3,12 @@
 ---
 
 game:
-  width: &id_1 7
-  length: *id_1
+  grid:
+    width: &id_1 7
+    length: *id_1
+  min_tile_connected: 4
+
   name1: 'MFD'
+  type1: 'RandomAI'
   name2: 'RBN'
+  type2: 'NeuralNetwork'
