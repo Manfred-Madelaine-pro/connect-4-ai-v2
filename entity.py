@@ -1,6 +1,9 @@
 import random
 
 
+import brain
+
+
 class Generic:
 	def __init__(self, name):
 		self.name = name
@@ -43,13 +46,10 @@ class RandomAI(Generic):
 class NeuralNetwork(Generic):
 	def __init__(self, name, connected_tiles_goal):
 		super().__init__(name)
-		self.connected_tiles_goal = connected_tiles_goal
-		self.brain = 'brain'
+		self.brain = brain.Brain(connected_tiles_goal)
 
 	def play(self, board):
-		# thoughts = self.brain.think(board)		
-		# choose best thought
-		return random.randint(0, len(board[0])-1)
+		return self.brain.think(board)
 		
 
 # ----------------------------- Test ---------------------------------------------
@@ -66,6 +66,9 @@ def test_Entity():
 	for i in range(2):
 		rp.play(board)
 
+
+	nn = NeuralNetwork('Random Entity', 4)
+	nn.play(board)
 
 if __name__ == '__main__':
 	test_Entity()

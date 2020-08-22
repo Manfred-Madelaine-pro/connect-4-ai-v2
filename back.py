@@ -57,7 +57,9 @@ class Menu:
 
 	def start(self, settings):
 		game = Game(*settings)
-		game.init_party()
+		while "players want's to play":
+			game.init_party()
+			break
 
 
 	def pick_player(self): # TODO
@@ -83,12 +85,18 @@ class Game:
 		self.players += [self.create_entity(name2, type2)]
 
 	def create_entity(self, name, type):
-		if type.lower() == 'human':
-			return entity.Human(name)
-		elif type.lower() == 'neuralnetwork':
-			return entity.NeuralNetwork(name, self.board.goal)
-		else:
-			return entity.RandomAI(name)
+		args = [f'{name} ({type})']
+		type = type.lower()
+		f = None
+		if type == 'human':
+			f = entity.Human
+		elif type == 'neuralnetwork':
+			f = entity.NeuralNetwork
+			args += [self.board.goal]
+		elif type == 'randomai':
+			f = entity.RandomAI
+
+		return f(*args)
 
 	# -------------------------------- Party ------------------------------------------
 
