@@ -1,6 +1,5 @@
 import random
 
-VERBOSE = True
 
 class Generic:
 	def __init__(self, name):
@@ -19,7 +18,7 @@ class Human(Generic):
 		super().__init__(name)
 
 	def play(self, board):
-		print(f"{self.name}: Do what you want !")
+		return input(f'Choose a column between 1 and {len(board[0])} > ')
 
 
 class Replay(Generic):
@@ -43,14 +42,11 @@ class RandomAI(Generic):
 
 # ----------------------------- Test ---------------------------------------------
 
-
-verbose_print = print if VERBOSE else lambda *a, **k: None
-
 def test_Entity():
 	e = Generic('Generic Entity')
 	rd = RandomAI('Random Entity')
 	
-	board = [[]*7]
+	board = [[1, 1]*7]
 	e.play(board)
 	rd.play(board)
 

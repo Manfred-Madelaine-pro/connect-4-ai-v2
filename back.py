@@ -6,7 +6,6 @@ import database as db
 from conf.global_config import *
 
 
-VERBOSE = True
 SKIP_INPUT = True
 DEFAULT_CONFIG = "conf/config.yml"
 
@@ -169,7 +168,7 @@ class Database:
 		conn = self.access_db()
 		rows = db.select_all(conn)
 
-		db.print_table(rows)
+		# db.print_table(rows)
 
 		actions = []
 		for row in rows:
@@ -180,9 +179,6 @@ class Database:
 
 
 # ------------------------ Test --------------------------------------------------
-
-
-verbose_print = print if VERBOSE else lambda *a, **k: None
 
 def test_Model():
 	width = 7
