@@ -41,7 +41,7 @@ class RandomAI(Generic):
 		return random.randint(0, len(board[0])-1)
 		
 
-# --------------------------------------------------------------------------
+# ----------------------------- Test ---------------------------------------------
 
 
 verbose_print = print if VERBOSE else lambda *a, **k: None

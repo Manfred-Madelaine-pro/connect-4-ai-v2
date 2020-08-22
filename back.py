@@ -104,21 +104,25 @@ class Party:
 		self.second = second
 		self.second.id = 2
 
-		self.turn = 0
+		self.turn = 1
 
 	def start(self):
 		self.board.set_board()
 		print(self.board)
 		while "Party is running":
-			if self.next_play(self.first):
-				break
-
-			if self.next_play(self.second):
+			print(f'Turn #{self.turn}')
+			if self.next_play(self.first) or self.next_play(self.second):
 				break
 
 			self.turn += 1
 
-		print('End of game !')
+		print('End of game :')
+		if self.board.grid_is_full():
+			print("It's a draw !")
+		else :
+			winner = self.first if self.board.get_last_player() == 1 else self.second
+			row, col, sens = self.board.winning_info()
+			print(f'{winner.name} won {sens} with the tile t{(row+1,col+1)} after {self.turn} turns !')
 
 
 	def next_play(self, player):
