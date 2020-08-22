@@ -1,6 +1,6 @@
 import random
-import numpy as np
 
+import board
 import entity
 import database as db
 from conf.global_config import *
@@ -75,7 +75,7 @@ class Game:
 		self.pick_players(name1, name2)
 
 	def init_board(self, width, length):
-		self.board = Board(width, length)
+		self.board = board.Board(width, length)
 
 	def pick_players(self, name1, name2):
 		self.players = []
@@ -90,47 +90,7 @@ class Game:
 		# random.shuffle()
 		party = Party(self.board, first, second)
 		party.start()
-		# save party in db
-
-
-# ------------------------------- Board -------------------------------------------
-
-class Board:
-	def __init__(self, width, length):
-		self.width = width
-		self.length = length
-
-	def set_board(self):
-		self.grid = np.zeros((self.width, self.length))
-		self.history = []
-
-	# ---------------------------- Core ----------------------------------------------
-
-	def is_complete(self):
-		return len(self.history) >= self.width * self.length
-
-	def column_is_full(self, col):
-		for row in self.grid:
-			if row[col] == 0:
-				return False
-		return True
-
-	def update(self, player_id, col):
-		for row in self.grid[::-1]:
-			if row[col] == 0:
-				row[col] = player_id
-				break
-		self.history += [col]
-
-	# ---------------------------- display ----------------------------------------------
-
-	def __str__(self):
-		title = f"Board ({self.width}, {self.length})"
-		grid = str(self.grid)
-		axe = '  ' + '  '.join([str(x) for x in range(1, self.length+1)])
-		sep = '\n'
-
-		return title + sep + grid + sep + axe
+		# TODO save party in db
 
 
 # ------------------------------- Party -------------------------------------------
@@ -173,7 +133,7 @@ class Party:
 		print(self.board)
 
 		return self.board.is_complete()
-		
+
 
 # ----------------------- Database ---------------------------
 
@@ -206,7 +166,7 @@ verbose_print = print if VERBOSE else lambda *a, **k: None
 
 def test_Model():
 	width = 7
-	model = Board(width, width)
+	model = board.Board(width, width)
 	print(model)
 
 
