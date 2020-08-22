@@ -28,7 +28,7 @@ def create_table(con):
 		con.execute(sql_create_table)
 
 
-def insert_rows(con, row):
+def insert_row(con, row):
 	sql_insert_row = """
 		INSERT INTO games (dimensions,player1,player2,turn,actions,creation_date)
 		VALUES (
@@ -43,6 +43,9 @@ def insert_rows(con, row):
 	with con:
 		try:
 			con.execute(sql_insert_row, row)
+
+			max_id = con.execute('SELECT max(id) FROM games').fetchone()[0]
+			return max_id
 		except sqlite3.IntegrityError:
 			return 'Line already exists.' 
 
@@ -78,7 +81,7 @@ def test_db_creation():
 		( '7, 7', 'Random AI', 'Random AI 2', '3', '1, 2, 3, 4, 5'),
 		( '4, 4', 'Random AI', 'Random AI 2', '2', '1, 2, 3'),
 	]
-	insert_rows(con, rows)
+	insert_row(con, rows)
 	rows = select_all(con)
 	print_table(rows)
 

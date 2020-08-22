@@ -170,8 +170,9 @@ class Database:
 
 	def save(self, data):
 		conn = self.access_db()
-		db.insert_rows(conn, data)
+		id = db.insert_row(conn, data)
 		conn.close()
+		print(f'Game #{id} saved.')
 
 	def load_db(self):
 		conn = self.access_db()
